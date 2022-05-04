@@ -22,9 +22,22 @@ L.tileLayer(`https://api.mapbox.com/styles/v1/${mbID}/${mbStyle}/tiles/256/{z}/{
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
+let valueColumn = "units.tot.15_19";
+let metricsLayer = null;
+
+let titleColumn = (valueColumn) => {
+  const valArray = valueColumn.split(".");
+  var focusTitle = `${valArray[0]}`
+  focusTitle = focusTitle.charAt(0).toUpperCase() + focusTitle.slice(1)
+  var focusNum = valArray[1].replace('tot', 'Total').replace('pct', 'Percent');
+  focusYears = `(20${valArray[2].replace('_','-')})`
+  return focusNum + ' ' + focusTitle + ' ' + focusYears
+}
+let valueTitle = titleColumn(valueColumn);
+
 // COLOR FUNCTIONS
-var colors = [];
-var bins = [];
+var colors;
+var bins;
 
 let getColors = (cmap, n) => colorbrewer[cmap][n];
 
@@ -50,22 +63,83 @@ let getValueColor = (value, column) => {
     return colors[binIndex];
 };
 
-// LAYER FUNCTIONS
-let valueColumn = "units.tot.15_19";
-let metricsLayer = null;
+// NUMBER FUNCTIONS
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function percentage(partialValue) {
+  return `${Math.round(partialValue * 100)}%`;
+}
+function checkNumber(value) {
+  if (Number.isFinite(value)) {
+    if (valueColumn.includes('pct')) {
+      value = percentage(value);
+    } else if (value > 1000) {
+      value = numberWithCommas(value)
+    }
+  }
+  return value
+}
 
-const loadMetrics = function () {
+// control that shows state info on hover
+var info = L.control();
+info.onAdd = function (map) {
+  this._div = L.DomUtil.create('div', 'info');
+  this.update();
+  return this._div;
+};
+info.update = function (props) {
+  this._div.innerHTML = '<h4>San Francisco</h4>' +  (props ?
+    '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>' : 'Hover over a Block Group');
+};
+info.addTo(map);
+
+// tool tip
+const loadToolTip = (layer) => {
+  ToolTipValue = layer.feature.properties[valueColumn];
+  ToolTipValue = checkNumber(ToolTipValue);
+  ToolTipValue = `${ToolTipValue}`
+  return ToolTipValue;
+}
+function highlightFeature(e) {
+  var layer = e.target;
+
+  layer.setStyle({
+      weight: 5,
+      color: '#666',
+      dashArray: '',
+      fillOpacity: 0.7
+  });
+
+  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+      layer.bringToFront();
+  }
+  info.update(layer.feature.properties);
+}
+
+var geojson;
+
+function resetHighlight(e) {
+  geojson.resetStyle(e.target);
+}
+function zoomToFeature(e) {
+  map.fitBounds(e.target.getBounds());
+}
+function onEachFeature(feature, layer) {
+  layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight,
+      click: zoomToFeature
+  });
+}
+function loadGeoJson() {
   fetch(`${apiHost}/data/sf_permit_metrics.geojson`)
     .then(resp => resp.json())
     .then(data => {
-      test = data;
-      metricsLayer = L.geoJSON(data, {
-        style: metricStyle,
-      });
-      metricsLayer.bindTooltip(l => l.feature.properties['geoid10'], { sticky: true });
-      metricsLayer.addTo(map);
+      return data
     });
-};
+}
+geojson = L.geoJson(loadGeoJson());
 
 let metricStyle = (feature) => ({
   weight: 6,
@@ -75,6 +149,19 @@ let metricStyle = (feature) => ({
   fillColor: getValueColor(feature.properties[valueColumn], valueColumn),
 });
 
+function loadMetrics() {
+  fetch(`${apiHost}/data/sf_permit_metrics.geojson`)
+    .then(resp => resp.json())
+    .then(data => {
+      metricsLayer = L.geoJSON(data, {
+        style: metricStyle,
+        onEachFeature: onEachFeature
+      });
+      metricsLayer.bindTooltip(layer => loadToolTip(layer), { sticky: true });
+      metricsLayer.addTo(map);
+    });
+}
+
 loadMetrics()
 
 var legend = L.control({position: 'bottomright'});
@@ -82,17 +169,19 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend');
-    let labels = [];
-    var from, to;
+    let labels = [`<strong>${valueTitle}</strong>`];
+    var from;
+    var to;
+    var color;
+    bins = valueBins[valueColumn].bins
 
-    // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < bins.length; i++) {
-			from = bins[i];
-			to = bins[i + 1];
+    for (var i = 0; i < bins.length-1; i++) {
+			from = checkNumber(bins[i]);
+			to = checkNumber(bins[i + 1]);
+      color = getValueColor(from + 1, valueColumn)
 
-			labels.push(
-				'<i style="background:' + colors[from + 1] + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
+      div.innerHTML += labels.push(
+				`<i class="circle" style="background:${color}"></i> ${from} - ${to}`);
 		}
 
 		div.innerHTML = labels.join('<br>');
