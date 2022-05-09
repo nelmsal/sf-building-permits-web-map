@@ -4,16 +4,18 @@
 *by Alex Nelms*
 
 ## Project Proposal
-My MUSA Capstone aims to understand the relationship between building construction permits and the San Francisco Bay Area's housing crisis between 2010 and 2022. For my MUSA 650 final project, an intereactive web map will visualize my larger capstone project's ([github](https://github.com/CPLN-680-Spring-2022/Nelms_Alex_BuildingPermits)) comparision of permits, 'gentrification' metrics, & housing affordability.
+My MUSA Capstone aims to understand the relationship between building construction permits and the San Francisco Bay Area's housing crisis between 2010 and 2022. For my MUSA 650 final project, an intereactive web map will visualize my larger capstone project's ([github](https://github.com/CPLN-680-Spring-2022/Nelms_Alex_BuildingPermits) [website](https://nelmsal.github.io/PermitMetrics_FinalReport.html)) comparision of permits, 'gentrification' metrics, & housing affordability.
 
-In summary, this project will display:
+In summary, this webmap displays:
  * a chloropleth map
- * Bay Area permits from 2010 to 2020
+ * Bay Area permits from 2015 to 2019
  * metrics displaying different gentrification & housing metrics:
      * rent, housing prices, evictions
      * changes in income, age, employment
      * indexes created by [Urban Displacement Project](https://www.urbandisplacement.org/) & [H+T Index](https://htaindex.cnt.org/)
  * a slideshow highlighting neighborhoods of importance
+
+![preview](http://url/to/img.png)
 
 ### Introduction
 The San Francisco Bay Area is currently in the middle of a housing crisis – where housing prices, homelessness, and inequalities are at an all time high. Genenerally, the core issue is that housing supply has not grown at the rate of demand for the last 60 years. The low rate of constructed homes is the result of city councils & regulations favoring wealthy NIMBY residents and limiting the amount & quality of building permits. The lack of quality local government data has made it difficult to form direct causality between exclusionary regulations and limited building permits to the larger issues of unafforadble housing and 'gentrification'.
