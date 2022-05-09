@@ -15,7 +15,7 @@ In summary, this webmap displays:
      * indexes created by [Urban Displacement Project](https://www.urbandisplacement.org/) & [H+T Index](https://htaindex.cnt.org/)
  * a slideshow highlighting neighborhoods of importance
 
-![preview](http://url/to/img.png)
+![preview](preview.png)
 
 ### Introduction
 The San Francisco Bay Area is currently in the middle of a housing crisis – where housing prices, homelessness, and inequalities are at an all time high. Genenerally, the core issue is that housing supply has not grown at the rate of demand for the last 60 years. The low rate of constructed homes is the result of city councils & regulations favoring wealthy NIMBY residents and limiting the amount & quality of building permits. The lack of quality local government data has made it difficult to form direct causality between exclusionary regulations and limited building permits to the larger issues of unafforadble housing and 'gentrification'.
