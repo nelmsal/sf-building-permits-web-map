@@ -1,5 +1,6 @@
 /* eslint-disable dot-notation */
-const apiHost = 'http://localhost:3000';
+// const apiHost = 'http://localhost:3000';
+const apiHost = 'https://github.com/nelmsal/sf-building-permits-web-map'
 // const apiHost = 'https://philly-trail-waze.herokuapp.com';
 
 /**
@@ -176,17 +177,9 @@ function onEachFeature(feature, layer) {
       click: zoomToFeature
   });
 }
-function loadGeoJson() {
-  fetch(`${apiHost}/data/sf_permit_metrics.geojson`)
-    .then(resp => resp.json())
-    .then(data => {
-      return data
-    });
-}
-geojson = L.geoJson(loadGeoJson());
 
 function loadMetrics() {
-  fetch(`${apiHost}/data/sf_permit_metrics.geojson`)
+  fetch(`${apiHost}/data/sf_permit_metrics.geojson`, {mode: 'cors'})
     .then(resp => resp.json())
     .then(data => {
       metricsLayer = L.geoJSON(data, {
@@ -235,7 +228,7 @@ legend.addTo(map);
 
 // UNITS HOT SPOT
 function loadHotSpot() {
-  fetch(`${apiHost}/data/sf_units_hotspots.geojson`)
+  fetch(`${apiHost}/data/sf_units_hotspots.geojson`, {mode: 'cors'})
     .then(resp => resp.json())
     .then(data => {
       hotspotLayer = L.geoJSON(data, {
