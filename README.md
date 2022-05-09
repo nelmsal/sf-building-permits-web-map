@@ -4,7 +4,7 @@
 *by Alex Nelms*
 
 ## Project Proposal
-My MUSA Capstone aims to understand the relationship between building construction permits and the San Francisco Bay Area's housing crisis between 2010 and 2022. For my MUSA 650 final project, an intereactive web map will visualize my larger capstone project's ([github](https://github.com/CPLN-680-Spring-2022/Nelms_Alex_BuildingPermits) [website](https://nelmsal.github.io/PermitMetrics_FinalReport.html)) comparision of permits, 'gentrification' metrics, & housing affordability.
+My MUSA Capstone aims to understand the relationship between building construction permits and the San Francisco Bay Area's housing crisis between 2010 and 2022. For my MUSA 650 final project, an intereactive web map will visualize my larger capstone project's comparision of permits, 'gentrification' metrics, & housing affordability. [[github](https://github.com/CPLN-680-Spring-2022/Nelms_Alex_BuildingPermits), [website](https://nelmsal.github.io/PermitMetrics_FinalReport.html)]
 
 In summary, this webmap displays:
  * a chloropleth map
